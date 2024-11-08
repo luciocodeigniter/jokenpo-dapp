@@ -1,15 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.27;
+import "./IJoKenPo.sol";
 
-contract JoKenPo {
-    // enumarator com as jogadas possíveis
-    // `NONE` é a jogada padrão
-    enum Options {
-        NONE,
-        ROCK,
-        PAPER,
-        SCISSORS // 0, 1, 2, 3
-    }
+contract JoKenPo is IJoKenPo {
+
 
     Options private choice1 = Options.NONE;
 
@@ -27,12 +21,6 @@ contract JoKenPo {
     // owner do contrato que não poderá ser alterado `immutable`
     // e que que é `payable`, pois receberá comissão de 10%
     address payable private immutable owner;
-
-    // representa cada jogador
-    struct Player {
-        address wallet;
-        uint32 wins;
-    }
 
     // array de jogadores que ficará no `storage` do contrato
     Player[] public players;
@@ -105,7 +93,7 @@ contract JoKenPo {
         choice1 = Options.NONE;
     }
 
-    function getBalance() public view returns (uint) {
+    function getBalance() external view returns (uint) {
         require(owner == msg.sender, "You do not have this permission");
         return address(this).balance;
     }
